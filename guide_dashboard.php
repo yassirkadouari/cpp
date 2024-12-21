@@ -4,10 +4,13 @@ require_once 'Randonnee.php';
 require_once 'User.php';
 
 // Vérification de la session
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'guide') {
-    header('Location: login.php');
+
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');  // Redirige vers la page de connexion si non connecté
     exit();
 }
+
+
 
 $randonnee = new Randonnee();
 

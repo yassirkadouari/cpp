@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once 'Randonnee.php';
-require_once 'User.php';
 
 // Vérification de la session
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'utilisateur') {
@@ -32,13 +31,15 @@ if (isset($_GET['rando_id'])) {
             margin: 0;
             padding: 0;
             font-family: 'Arial', sans-serif;
-            background: #2b3e50; /* Couleur de fond */
-            overflow: hidden; /* Empêche le défilement pour les flocons */
+            background-color: #121212; /* Fond sombre */
+            color: #eaeaea; /* Texte clair */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden; /* Empêche le défilement horizontal */
         }
 
+        /* Animation de neige */
         #snow {
             position: fixed;
             top: 0;
@@ -50,32 +51,26 @@ if (isset($_GET['rando_id'])) {
 
         .snowflake {
             position: absolute;
-            top: -10px;
+            top: -10px; /* Commence au-dessus de l'écran */
             color: white;
             font-size: 1em;
-            animation: fall linear infinite, sway ease-in-out infinite;
+            animation: fall linear infinite;
         }
 
         @keyframes fall {
             0% {
-                transform: translateY(-10px);
+                transform: translateY(-10px); /* Commence légèrement au-dessus */
             }
             100% {
                 transform: translateY(100vh); /* Descend jusqu'en bas de l'écran */
             }
         }
 
-        @keyframes sway {
-            0%, 100% {
-                transform: translateX(0px);
-            }
-            50% {
-                transform: translateX(20px); /* Oscillation horizontale */
-            }
-        }
-
         .navbar {
             background: #343a40;
+            border-radius: 20px; /* Arrondi des coins de la navbar */
+            padding: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-brand, .navbar a {
@@ -93,7 +88,7 @@ if (isset($_GET['rando_id'])) {
             overflow: hidden;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            background: #ffffff;
+            background: #1e1e1e;
         }
 
         .card:hover {
@@ -128,9 +123,18 @@ if (isset($_GET['rando_id'])) {
         .btn-inscription:hover {
             background-color: #0056b3;
         }
+
+        .alert-success {
+            color: #28a745;
+        }
+
+        .alert-danger {
+            color: #dc3545;
+        }
     </style>
 </head>
 <body>
+
     <!-- Animation de neige -->
     <div id="snow"></div>
 

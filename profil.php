@@ -2,7 +2,7 @@
 session_start();
 require_once 'User.php';
 
-// Vérification de la session
+
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $user->updateProfile($_SESSION['user_id'], $nom, $email);
         $success = "Profil mis à jour avec succès.";
-        $userData = $user->getUserById($_SESSION['user_id']); // Actualisation des données
+        $userData = $user->getUserById($_SESSION['user_id']); 
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -41,21 +41,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Mon Profil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Mode sombre */
+      
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #121212; /* Fond sombre */
-            color: #eaeaea; /* Texte clair */
+            background-color: #121212; 
+            color: #eaeaea; 
             margin: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Force la hauteur minimale */
+            min-height: 100vh; 
         }
 
-        /* Navbar positionnée en haut */
+        
         .navbar {
-            background-color: #1f1f1f; /* Fond sombre pour la navbar */
-            border-radius: 30px 30px 0 0; /* Arrondi sur le dessus */
+            background-color: #1f1f1f; 
+            border-radius: 30px 30px 0 0; 
             margin-bottom: 20px;
         }
 
@@ -65,22 +65,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .navbar a:hover {
-            color: #3897f0 !important; /* Couleur bleu Instagram au survol */
+            color: #3897f0 !important; 
         }
 
-        /* Conteneur du profil */
+        
         .profile-container {
-            background: #1e1e1e; /* Fond sombre des conteneurs */
+            background: #1e1e1e; 
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             width: 400px;
             margin: 0 auto;
-            margin-top: 50px; /* Ajout d'espace en haut */
+            margin-top: 50px;
         }
 
         .form-control:focus {
-            border-color: #3897f0; /* Blue Instagram */
+            border-color: #3897f0;
             box-shadow: 0 0 10px #3897f0;
         }
 
@@ -96,16 +96,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transform: scale(1.05);
         }
 
-        /* Footer positionné en bas */
+        
         .footer {
-            background: #1f1f1f; /* Fond sombre du footer */
+            background: #1f1f1f; 
             color: #ffffff;
             text-align: center;
             padding: 10px;
-            position: relative;
+            position: absolute;
             bottom: 0;
             width: 100%;
-            border-radius: 0 0 30px 30px; /* Arrondi sur le bas */
+            border-radius: 0 0 30px 30px; 
         }
 
         .alert {
@@ -132,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-    <!-- Navbar -->
+   
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="#">Mon Profil</a>
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </nav>
 
-    <!-- Contenu principal -->
+    
     <div class="profile-container">
         <h3 class="text-center mb-4">Mon Profil</h3>
         <?php if (!empty($success)): ?>
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </div>
 
-    <!-- Footer -->
+   
     <footer class="footer">
         <p>&copy; 2024 RandoSite. Tous droits réservés.</p>
     </footer>

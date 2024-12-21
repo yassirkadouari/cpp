@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once 'Randonnee.php';
+require_once 'User.php';
 require_once 'Inscription.php';
 
 // Vérification de la session
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
+    header('Location: login.php');  // Redirige vers la page de connexion si non connecté
     exit();
 }
 
@@ -22,6 +23,9 @@ if (!$details) {
     echo "Randonnée introuvable.";
     exit();
 }
+
+// Vérification si l'utilisateur connecté est le guide de cette randonnée
+$isGuide = ($details['guide_id'] == $_SESSION['user_id']);  // Comparer l'ID du guide de la randonnée avec l'ID de l'utilisateur connecté
 
 $inscription = new Inscription();
 $success = "";
@@ -131,6 +135,15 @@ if (isset($_GET['action']) && $_GET['action'] === 'inscrire') {
             background-color: #444;
         }
 
+        .btn-edit {
+            background-color: #ffc107;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #e0a800;
+        }
+
         .alert {
             margin-top: 20px;
             font-size: 14px;
@@ -167,6 +180,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'inscrire') {
         <?php endif; ?>
 
         <!-- Boutons -->
+        <?php if ($isGuide): ?>
+            <!-- Si l'utilisateur est le guide, afficher le bouton pour modifier -->
+            <a href="update_randonnee.php?id=<?php echo $details['id']; ?>" class="btn btn-edit">Modifier</a>
+        <?php endif; ?>
         <a href="randonnee_details_user.php?id=<?php echo $details['id']; ?>&action=inscrire" class="btn btn-primary">S'inscrire</a>
         <a href="user_dashboard.php" class="btn btn-secondary">Retour</a>
     </div>
