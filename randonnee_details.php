@@ -2,6 +2,7 @@
 session_start();
 require_once 'Randonnee.php';
 require_once 'User.php'; // Classe User avec la méthode getUserById
+require_once 'Commentaire.php'; // Inclure la classe Commentaire pour gérer les commentaires
 
 // Initialisation des variables
 $success = "";
@@ -45,6 +46,21 @@ if (isset($_GET['action']) && $_GET['action'] === 'inscrire') {
         $randonnee->incrementInscrits($details['id']); // Mise à jour du nombre d'inscrits
         $success = "Vous êtes inscrit avec succès à cette randonnée.";
         $details = $randonnee->getById($details['id']); // Actualisation des détails
+    } catch (Exception $e) {
+        $error = $e->getMessage();
+    }
+}
+
+// Récupérer les commentaires pour cette randonnée
+$commentaire = new Commentaire();
+$comments = $commentaire->getCommentsForRandonnee($details['id']);
+
+// Gestion de l'ajout d'un commentaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['commentaire'])) {
+    try {
+        $commentaire->addComment($_SESSION['user_id'], $details['id'], $_POST['commentaire']);
+        $success = "Votre commentaire a été ajouté avec succès.";
+        $comments = $commentaire->getCommentsForRandonnee($details['id']); // Rafraîchir les commentaires
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -147,6 +163,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'inscrire') {
             color: #fff;
             border: none;
         }
+
         .btn-edit:hover {
             background: #e0a800;
         }
@@ -170,6 +187,33 @@ if (isset($_GET['action']) && $_GET['action'] === 'inscrire') {
         .btn-link:hover {
             color: #3897f0 !important;
         }
+
+        /* Commentaire styles */
+        .comment-container {
+            margin-top: 20px;
+        }
+
+        .comment {
+            background: #2c2c2c;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .comment .author {
+            font-weight: bold;
+            color: #3897f0;
+        }
+
+        .comment .email {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .comment .content {
+            margin-top: 5px;
+        }
+
     </style>
 </head>
 <body>
@@ -200,6 +244,28 @@ if (isset($_GET['action']) && $_GET['action'] === 'inscrire') {
         <!-- Actions -->
         <a href="update_randonnee.php?id=<?php echo $details['id']; ?>" class="btn btn-edit">Modifier</a>
         <a href="organisateur_dashboard.php?delete_id=<?php echo $details['id']; ?>" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette randonnée ?');">Supprimer</a>
+
+        <!-- Formulaire pour ajouter un commentaire -->
+        <div class="comment-container">
+            <h4>Ajouter un commentaire</h4>
+            <form method="POST">
+                <textarea name="commentaire" class="form-control" rows="4" required></textarea>
+                <button type="submit" class="btn btn-primary mt-2">Publier le commentaire</button>
+            </form>
+        </div>
+
+        <!-- Affichage des commentaires -->
+        <div class="comments">
+            <h4>Commentaires :</h4>
+            <?php foreach ($comments as $comment): ?>
+                <div class="comment">
+                    <div class="author"><?php echo htmlspecialchars($comment['auteur']); ?></div>
+                    <div class="email"><?php echo htmlspecialchars($comment['email']); ?></div>
+                    <div class="content"><?php echo nl2br(htmlspecialchars($comment['commentaire'])); ?></div>
+                    <div class="date"><?php echo htmlspecialchars($comment['date_creation']); ?></div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 </body>
 </html>

@@ -4,13 +4,10 @@ require_once 'Randonnee.php';
 require_once 'User.php';
 
 // Vérification de la session
-
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');  // Redirige vers la page de connexion si non connecté
     exit();
 }
-
-
 
 $randonnee = new Randonnee();
 
@@ -83,15 +80,6 @@ $myRandos = $randonnee->getByGuide($_SESSION['user_id']);
             padding: 10px 0;
             margin-top: auto;
         }
-
-        .btn-edit {
-            background-color: #ffc107;
-            color: white;
-        }
-
-        .btn-edit:hover {
-            background-color: #e0a800;
-        }
     </style>
 </head>
 <body>
@@ -115,17 +103,17 @@ $myRandos = $randonnee->getByGuide($_SESSION['user_id']);
             <?php foreach ($randos as $rando): ?>
                 <div class="col-md-4">
                     <div class="card">
-                        <!-- Lien vers les détails -->
-                        <a href="randonnee_details_user.php?id=<?php echo $rando['id']; ?>">
+                        <!-- Lien vers les détails de la randonnée -->
+                        <a href="randonnee_details_guide.php?id=<?php echo $rando['id']; ?>">
+                            <!-- Image de la randonnée -->
                             <img src="<?php echo htmlspecialchars($rando['image']); ?>" alt="Image de la randonnée" class="card-img-top">
                         </a>
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($rando['location']); ?></h5>
+                            <!-- Lien vers les détails de la randonnée -->
+                            <a href="randonnee_details_guide.php?id=<?php echo $rando['id']; ?>">
+                                <h5 class="card-title"><?php echo htmlspecialchars($rando['location']); ?></h5>
+                            </a>
                             <p class="text-muted">Organisé par : <?php echo htmlspecialchars($rando['organisateur_name']); ?></p>
-                            <?php if (in_array($rando, $myRandos)): ?>
-                                <!-- Bouton de modification uniquement pour les randonnées du guide -->
-                                <a href="update_randonnee.php?id=<?php echo $rando['id']; ?>" class="btn btn-edit w-100">Modifier</a>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

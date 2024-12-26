@@ -19,6 +19,7 @@ class DatabaseSetup {
         $this->createUsersTable();
         $this->createRandonneesTable();
         $this->createCommentairesTable();
+        $this->createInscriptionsTable();  // Ajout de la création de la table inscriptions
     }
 
     private function createUsersTable() {
@@ -54,6 +55,18 @@ class DatabaseSetup {
             user_id INT UNSIGNED NOT NULL,
             randonnee_id INT UNSIGNED NOT NULL,
             commentaire TEXT NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (randonnee_id) REFERENCES randonnees(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB";
+        $this->pdo->exec($query);
+    }
+
+    // Création de la table inscriptions
+    private function createInscriptionsTable() {
+        $query = "CREATE TABLE IF NOT EXISTS inscriptions (
+            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id INT UNSIGNED NOT NULL,
+            randonnee_id INT UNSIGNED NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY (randonnee_id) REFERENCES randonnees(id) ON DELETE CASCADE
         ) ENGINE=InnoDB";
